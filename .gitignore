@@ -1,0 +1,12 @@
+# Python Umgebung & Cache
+venv/
+__pycache__/
+*.pyc
+
+# Lokale KI-Modelle (falls PyTorch später Gewichte herunterlädt)
+*.bin
+*.pt
+*.pth
+
+# Geheime Umgebungsvariablen
+.env
