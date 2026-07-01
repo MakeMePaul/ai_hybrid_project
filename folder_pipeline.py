@@ -1,6 +1,6 @@
 import os
 import time
-from pytorch_tool import klassifiziere_text
+from pytorch_tool import klassifiziere_text, anonymisiere_text
 from azure_tool import fasse_text_zusammen
 
 # Wir definieren unsere Ordner
@@ -28,10 +28,11 @@ def main():
                 with open(filepath, "r", encoding="utf-8") as f:
                     text = f.read()
 
-                # 2. Unsere Hybrid-KI arbeiten lassen
+                text_anonym = anonymisiere_text(text)
                 stimmung = klassifiziere_text(text)
-                zusammenfassung = fasse_text_zusammen(text)
 
+                # 3. Azure bekommt nur den anonymisierten Text
+                zusammenfassung = fasse_text_zusammen(text_anonym)
                 # 3. Das Ergebnis in den Ausgangs-Ordner schreiben
                 ausgangs_filepath = os.path.join(AUSGANG_ORDNER, f"analyse_{dateiname}")
                 with open(ausgangs_filepath, "w", encoding="utf-8") as f:
@@ -40,6 +41,7 @@ def main():
                     f.write(f"Dringlichkeit/Stimmung: {stimmung}\n")
                     f.write("-" * 30 + "\n")
                     f.write(f"Zusammenfassung:\n{zusammenfassung}\n")
+                    f.write(f"Text_Anonym:\n{text_anonym}\n")
 
                 # 4. Die Originaldatei löschen, damit sie nicht doppelt verarbeitet wird
                 os.remove(filepath)
